@@ -27,9 +27,7 @@ var App = React.createClass({
 				<div>
 					<MeetupInputForm/>
 				</div>
-				<div id="map">
-					<MeetupMap/>
-				</div>
+				<MeetupMap/>
 			</div>
 		)
 	}
@@ -64,22 +62,23 @@ var Order = React.createClass({
 /* 
 	MeetupInputForm
 	<MeetupInputForm/>
-	'this' inside StorePicker refers to the component, not the function
+	'this' refers to the component, not the function
 */
 
 var MeetupInputForm = React.createClass({
 	// History is part of ReactRouter, see line ~ 8
 	mixins : [History],
 
-	// goToStore : function(event) {
-	// 	event.preventDefault();
-	// 	var storeId = this.refs.storeId.value;
-	// 	this.history.pushState(null, '/store/' + storeId);
-	// },
+	getLocation : function(event) {
+		event.preventDefault();
+		var location = this.refs.location.value;
+		console.log(location);
+		// this.history.pushState(null, '/store/' + storeId);
+	},
 
 	render : function() {
 		return (
-			<form className="meetup-input-form" onSubmit={this.goToStore}> 
+			<form className="meetup-input-form" onSubmit={this.getLocation}> 
 				<input type="text" ref="location" required/>
 				<input type="Submit"/>
 			</form>
@@ -91,7 +90,6 @@ var MeetupInputForm = React.createClass({
 	MeetupMap
 	<MeetupMap/>
 */
-// {map.new(39.9526, -75.1652, 11)}
 
 var MeetupMap = React.createClass({
 	loadMap : function() {
