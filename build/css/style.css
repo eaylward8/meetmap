@@ -1,0 +1,8 @@
+body {
+  background-color: #878787;
+}
+#map {
+  height: 400px;
+  width: 60%;
+  margin-top: 20px;
+}
