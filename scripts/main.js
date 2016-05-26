@@ -12,6 +12,8 @@ var createBrowserHistory = require('history/lib/createBrowserHistory');
 
 var h = require('./helpers');
 var map = require('./google-map');
+var geo = require('./google-geocoder');
+var marker = require('./google-marker');
 
 /* 
 	App
@@ -69,17 +71,26 @@ var MeetupInputForm = React.createClass({
 	// History is part of ReactRouter, see line ~ 8
 	mixins : [History],
 
-	getLocation : function(event) {
+	setLocation : function(event) {
 		event.preventDefault();
-		var location = this.refs.location.value;
-		console.log(location);
-		// this.history.pushState(null, '/store/' + storeId);
+		var address = this.refs.address.value;
+		var geocoder = geo.initialize();
+		geocoder.geocode({'address': address}, function(results, status) {
+			if (status === google.maps.GeocoderStatus.OK) {
+				geo.location = results[0].geometry.location;
+				marker.placeMarker(map.currentMap, geo.location);
+			} else {
+				alert("Geocode process had the following error:" + status)
+			}
+		});
+		// this.history.pushState(null, '/');
 	},
 
 	render : function() {
 		return (
-			<form className="meetup-input-form" onSubmit={this.getLocation}> 
-				<input type="text" ref="location" required/>
+			<form className="meetup-input-form" onSubmit={this.setLocation}>
+				<label htmlFor="address">Address </label> 
+				<input type="text" id="address" ref="address" required/><br/>
 				<input type="Submit"/>
 			</form>
 		)
@@ -92,16 +103,10 @@ var MeetupInputForm = React.createClass({
 */
 
 var MeetupMap = React.createClass({
-	loadMap : function() {
-		document.addEventListener("DOMContentLoaded", function() {
-    	map.initMap();
-  	});
-	},
-
 	render : function() {
 		return (
 			<div id="map">
-				{this.loadMap()}
+				{map.loadMapAfterDOM()}
 			</div>
 		)
 	}
