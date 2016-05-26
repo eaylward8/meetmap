@@ -80,7 +80,7 @@ var MeetupInputForm = React.createClass({
 				geo.location = results[0].geometry.location;
 				marker.placeMarker(map.currentMap, geo.location);
 			} else {
-				alert("Geocode process had the following error:" + status)
+				alert("Please enter a valid address. (Error: " + status + ")");
 			}
 		});
 		// this.history.pushState(null, '/');
