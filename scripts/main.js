@@ -82,7 +82,7 @@ var MeetupInputForm = React.createClass({
 				// place marker for user's address
 				marker.placeMarker(map.currentMap, geo.location);
 				$.get({
-					url: 'https://api.meetup.com/2/open_events?and_text=False&offset=0&format=json&lon=' + geo.location.lng() + '&limited_events=False&photo-host=public&page=20&time=%2C1d&radius=25.0&lat=' + geo.location.lat() + '&desc=False&status=upcoming&sig_id=190348600&sig=8edc07f145dfbe02e2b74b07f204eb058f667ac6',
+					url: 'https://api.meetup.com/2/open_events?and_text=False&offset=0&format=json&lon=' + geo.location.lng() + '&limited_events=False&photo-host=public&page=20&time=%2C1d&radius=10.0&lat=' + geo.location.lat() + '&desc=False&status=upcoming&sig_id=190348600&sig=8edc07f145dfbe02e2b74b07f204eb058f667ac6',
 					dataType: "jsonp"
 				}).success(function(data) {
 					//iterate over meetups
