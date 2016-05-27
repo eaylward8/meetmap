@@ -1,5 +1,5 @@
 var googleMarker = {
-	userMarker : '../images/blue-pin.svg',
+	userMarker : '../build/css/images/green-pin.svg',
 
 	markers : [],
 
@@ -12,13 +12,12 @@ var googleMarker = {
 		googleMarker.markers.push(marker);
 	},
 
-
-
 	//this is doing more than placing a marker - break up/rename
 	placeMarker : function(map, location) {
 		map.setCenter(location);
 		map.setZoom(12);
 		googleMarker.hidePriorMarkers();
+		googleMarker.markers.length = 0;
 		googleMarker.initialize(map, location, googleMarker.userMarker);
 	},
 

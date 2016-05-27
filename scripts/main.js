@@ -11,9 +11,10 @@ var History = ReactRouter.History;
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 
 var h = require('./helpers');
-var map = require('./google-map');
-var geo = require('./google-geocoder');
-var marker = require('./google-marker');
+
+var myGmaps = require('./google-map');
+myGmaps.setParent();
+
 var meetup = require('./meetup-api-adapter');
 
 /* 
@@ -51,18 +52,6 @@ var Header = React.createClass({
 });
 
 /* 
-	Order
-*/
-
-var Order = React.createClass({
-	render : function() {
-		return (
-			<p>Order</p>
-		)
-	}
-});
-
-/* 
 	MeetupInputForm
 	<MeetupInputForm/>
 	'this' refers to the component, not the function
@@ -72,41 +61,15 @@ var MeetupInputForm = React.createClass({
 	// History is part of ReactRouter, see line ~ 8
 	mixins : [History],
 
-	setLocation : function(event) {
+	getAddress : function(event) {
 		event.preventDefault();
 		var address = this.refs.address.value;
-		var geocoder = geo.initialize();
-		geocoder.geocode({'address': address}, function(results, status) {
-			if (status === google.maps.GeocoderStatus.OK) {
-				geo.location = results[0].geometry.location;
-				// place marker for user's address
-				marker.placeMarker(map.currentMap, geo.location);
-				$.get({
-					url: 'https://api.meetup.com/2/open_events?and_text=False&offset=0&format=json&lon=' + geo.location.lng() + '&limited_events=False&photo-host=public&page=20&time=%2C1d&radius=10.0&lat=' + geo.location.lat() + '&desc=False&status=upcoming&sig_id=190348600&sig=8edc07f145dfbe02e2b74b07f204eb058f667ac6',
-					dataType: "jsonp"
-				}).success(function(data) {
-					//iterate over meetups
-					// use map iterator
-					var validMeetups = data.results.filter(function(meetup) {
-						if (meetup.venue) { return meetup }
-					});
-					validMeetups.forEach(function(meetup) {
-						var lat = meetup.venue.lat;
-						var lon = meetup.venue.lon;
-						var myLatLon = new google.maps.LatLng(lat, lon);
-						marker.initialize(map.currentMap, myLatLon);
-					});
-					// make markers for each meetup
-				});
-			} else {
-				alert("Please enter a valid address. (Error: " + status + ")");
-			}
-		});
+		myGmaps.geocoder.geocodeAddress(address);
 	},
 
 	render : function() {
 		return (
-			<form className="meetup-input-form" onSubmit={this.setLocation}>
+			<form className="meetup-input-form" onSubmit={this.getAddress}>
 				<label htmlFor="address">Address </label> 
 				<input type="text" id="address" ref="address" required/><br/>
 				<input type="Submit"/>
@@ -124,7 +87,7 @@ var MeetupMap = React.createClass({
 	render : function() {
 		return (
 			<div id="map">
-				{map.loadMapAfterDOM()}
+				{myGmaps.gmap.loadMapAfterDOM()}
 			</div>
 		)
 	}
