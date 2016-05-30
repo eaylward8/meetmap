@@ -41,18 +41,34 @@ var App = React.createClass({
 			this.addLocation(myLoc);
 			this.setMapToUserLocation(myMap, myLoc);
 
-			var promise = meetupApiAdapter.returnMeetupData(myLoc.lat(), myLoc.lng());
-			
-			var callback = {
-				fulfillment: this.placeMeetupMarkers,
-				rejection: function(reason) { alert(reason) }
-			}
+			// var promise = meetupApiAdapter.returnMeetupData(myLoc.lat(), myLoc.lng());
 
-			promise.then(callback.fulfillment, callback.rejection);
+			// var callback = {
+			// 	fulfillment: this.placeMeetupMarkers,
+			// 	rejection: function(reason) { alert(reason) }
+			// }
+
+			// promise.then(callback.fulfillment, callback.rejection);
 
 		} else {
 			alert("Please enter a valid address. (Error: " + status + ")");
 		}
+	},
+
+	findMeetups: function(category) {
+		debugger;
+		var id = locationCount;
+		var lat = this.state.locations['loc-' + id].lat();
+		var lng = this.state.locations['loc-' + id].lng();
+		debugger;
+		var promise = meetupApiAdapter.returnMeetupData();
+
+		var callback = {
+			fulfillment: this.placeMeetupMarkers,
+			rejection: function(reason) { alert(reason) }
+		}
+
+		promise.then(callback.fulfillment, callback.rejection);
 	},
 
 	placeMeetupMarkers: function(meetups) {
@@ -110,7 +126,7 @@ var App = React.createClass({
 			<div className="top-div">
 				<Header/>
 				<div>
-					<MeetupInputForm geocodeAddress={this.geocodeAddress}/>
+					<MeetupInputForm geocodeAddress={this.geocodeAddress} findMeetups={this.findMeetups}/>
 				</div>
 				<GoogleMap gmaps={this.state.gmaps}/>
 			</div>
@@ -144,16 +160,30 @@ var MeetupInputForm = React.createClass({
 	getAddress: function(event) {
 		event.preventDefault();
 		var address = this.refs.address.value;
+		var category = this.refs.category.value;
 		// take address and add to App State
 		this.props.geocodeAddress(address);
+		this.props.findMeetups(category);
 		this.refs.meetupInput.reset();
 	},
 
+	renderOption: function(category) {
+		return (
+			<option value={category.id} key={category.id}>{category.sort_name}</option>
+		)
+	},
+
 	render: function() {
+		var categories = require('./meetup-categories');
 		return (
 			<form className="meetup-input-form" ref="meetupInput" onSubmit={this.getAddress}>
-				<label htmlFor="address">Address </label> 
+				<label htmlFor="address">Address </label>
 				<input type="text" id="address" ref="address" required/><br/>
+				<label htmlFor="category">Meetup Category </label>
+				<select ref="category">
+					<option value={0}>All</option>
+					{categories.map(this.renderOption)}
+				</select>
 				<input type="Submit"/>
 			</form>
 		)
