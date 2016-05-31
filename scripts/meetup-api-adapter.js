@@ -4,14 +4,13 @@ var meetupApiAdapter = {
 	},
 	
 	returnMeetupData: function(lat, lon, rad) {
-		debugger;
 		var p = new Promise(function(resolve, reject) {
 			$.get({
 				url: meetupApiAdapter.urls.baseEventsUrl,
 				data: {lat: lat, lon: lon, radius: rad},
 				dataType: 'jsonp'
 			}).success(function(data) {
-				debugger;
+				
 				var validMeetups = data.results.filter(function(meetup) {
 					if (meetup.venue) { return meetup }
 				});

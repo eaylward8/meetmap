@@ -11,7 +11,6 @@ var History = ReactRouter.History;
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 
 var meetupApiAdapter = require('./meetup-api-adapter');
-
 var locationCount = 0;
 var meetupCount = 0;
 
@@ -49,7 +48,12 @@ var App = React.createClass({
 			var lat = meetup.venue.lat;
 			var lon = meetup.venue.lon;
 			var myLatLon = new google.maps.LatLng(lat, lon);
-			this.initMarker(this.state.gmaps.gmap, myLatLon);
+			var eventName = meetup.name;
+			var group = meetup.group.name;
+			var content = '<h3>' + group + '</h3>' +
+				'<p>' + eventName + '</p>';
+
+			this.initMarker(this.state.gmaps.gmap, myLatLon, null, content);
 		}, this);
 	},
 
@@ -69,16 +73,22 @@ var App = React.createClass({
 		if (locationCount > 1) {
 			this.hidePriorMarkers();	
 		}
-
-		this.initMarker(map, location, userMarker);
+		var content = '<p>You are here!</p>';
+		this.initMarker(map, location, userMarker, content);
 	},
 
-	initMarker: function(map, location, icon) {
+	initMarker: function(map, location, icon, content) {	
 		var marker = new google.maps.Marker({
 			map: map,
 			position: location,
 			icon: icon
 		});
+
+		google.maps.event.addListener(marker, 'click', function() {
+    	this.state.gmaps.infowindow.setContent(content);	
+    	this.state.gmaps.infowindow.open(map, marker);
+  	}.bind(this));
+
 		this.addMarker(marker);
 	},
 
@@ -109,6 +119,7 @@ var App = React.createClass({
 
 /* 
 	Header
+	<Header/>
 */
 
 var Header = React.createClass({
@@ -176,8 +187,8 @@ var MeetupInputForm = React.createClass({
 });
 
 /*
-	MeetupMap
-	<MeetupMap/>
+	GoogleMap
+	<GoogleMap/>
 */
 
 var GoogleMap = React.createClass({
@@ -187,6 +198,7 @@ var GoogleMap = React.createClass({
 				center: {lat: 39.9526, lng: -75.1652},
 				zoom: 11
 			});
+			gmaps['infowindow'] = new google.maps.InfoWindow();
 		});
 	},
 
