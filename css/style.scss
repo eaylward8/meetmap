@@ -1,9 +1,88 @@
 body {
-	background-color: #878787;
+	background-color: #ecf0f1;
+}
+
+#green-pin {
+	max-width: 40px;
+	padding-top: 6px;
+	vertical-align: center;
+	float: left;
 }
 
 #map {
-	height: 400px;
-	width: 60%;
+	max-width: 100%;
+	height: 500px;
 	margin-top: 20px;
 }
+
+.navbar-header {
+	float: none;
+	text-align: center;
+}
+
+#nav-custom {
+	width: 100%;
+	background-color: #e67e22;
+	border-top: 1px solid #e67e22;
+	border-right: 1px solid #e67e22;
+	border-bottom: 1px solid #d35400;
+	border-radius: 0;
+}
+
+#meetmap-title {
+	color: #ecf0f1;
+	font-family: "Amaranth", sans-serif;
+	font-size: 2.6em;
+	font-weight: 700;
+}
+
+#main-container {
+	display: flex;
+	height: 88vh;
+	max-width: 100%;
+	overflow: hidden;
+	backface-visibility: hidden;
+  will-change: overflow;
+}
+
+#meetup-list-div {
+	overflow: auto;
+	height: auto;
+}
+
+.form-group {
+	padding-left: 0;
+	width: 100%;
+}
+.form-group label {
+	padding-right: 10px;
+}
+
+.form-group input,
+.form-group select {
+	margin-right: 12px;
+}
+
+#address {
+	width: 50%;
+}
+
+.btn-primary {
+	float: right;
+}
+
+.panel-primary {
+	border-color: #27ae60;
+}
+
+.panel-primary>.panel-heading {
+	background-color: #2ecc71;
+	border-color: #27ae60;
+}
+
+
+
+
+
+
+

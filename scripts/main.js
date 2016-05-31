@@ -28,6 +28,23 @@ var App = React.createClass({
 		}
 	},
 
+	componentDidMount: function() {
+    // var localStorageRef = localStorage.getItem('meetups');
+    // if (localStorageRef) {
+    //   this.setState({
+    //     meetups: JSON.parse(localStorageRef)
+    //   })
+    // }
+  },
+
+  componentWillUpdate: function(nextProps, nextState) {
+    // localStorage.setItem('meetups', JSON.stringify(nextState.meetups));
+  },
+
+  clearMeetups: function() {
+  	this.state.meetups = {};
+  },
+
 	findMeetups: function(radius) {
 		var id = locationCount;
 		var rad = parseFloat(radius);
@@ -44,6 +61,8 @@ var App = React.createClass({
 	},
 
 	placeMeetupMarkers: function(meetups) {
+		meetupCount = 0;
+		this.clearMeetups();
 		meetups.forEach(function(meetup) {
 			var lat = meetup.venue.lat;
 			var lon = meetup.venue.lon;
@@ -58,7 +77,9 @@ var App = React.createClass({
 	},
 
 	addMeetup: function(meetup) {
-		this.state.meetups['loc-' + locationCount + '-meetups'].push(meetup);
+		var locId = locationCount;
+		var meetupId = meetupCount += 1;
+		this.state.meetups['loc-' + locationCount + '-meetup-' + meetupId] = meetup;
 		this.setState({ meetups: this.state.meetups })
 	},
 
@@ -67,7 +88,6 @@ var App = React.createClass({
 		this.state.locations['loc-' + id] = location;
 		// set up array for this location's markers
 		this.state.markers['loc-' + id + '-markers'] = [];
-		this.state.meetups['loc-' + id + '-meetups'] = [];
 		this.setState({ locations: this.state.locations, markers: this.state.markers, meetups: this.state.meetups });
 	},
 
@@ -103,21 +123,30 @@ var App = React.createClass({
 		this.setState({ markers: this.state.markers });
 	},
 
-	hidePriorMarkers : function() {
+	hidePriorMarkers: function() {
 		var prevId = locationCount - 1;
 		this.state.markers['loc-' + prevId + '-markers'].forEach(function(marker) {
 			marker.setMap(null);
 		});
 	},
 
+	renderMeetupDetail: function(key) {
+		return <MeetupDetail key={key} index={key} meetupInfo={this.state.meetups[key]}/>
+	},
+
 	render: function() {
 		return (
-			<div className="top-div">
+			<div className="container-fluid">
 				<Header/>
-				<div>
-					<MeetupInputForm state={this.state} addLocation={this.addLocation} setMapToUserLocation={this.setMapToUserLocation} findMeetups={this.findMeetups}/>
+				<div className="row" id="main-container">
+					<div className="col-md-7">
+						<MeetupInputForm state={this.state} addLocation={this.addLocation} setMapToUserLocation={this.setMapToUserLocation} findMeetups={this.findMeetups}/>
+						<GoogleMap gmaps={this.state.gmaps}/>
+					</div>
+					<div className="col-md-5" id="meetup-list-div">
+							{Object.keys(this.state.meetups).map(this.renderMeetupDetail)}
+					</div>
 				</div>
-				<GoogleMap gmaps={this.state.gmaps}/>
 			</div>
 		)
 	}
@@ -131,9 +160,36 @@ var App = React.createClass({
 var Header = React.createClass({
 	render: function() {
 		return (
-			<header className="top">
-				<h1>Find Meetups Near You</h1>
-			</header>
+			<div className="row">
+				<nav className="navbar navbar-default" id="nav-custom">
+				  <div className="container-fluid">
+				  	<div className="navbar-header">
+				  		<img src="../css/images/green-pin.svg" alt="Green Map Pin" id="green-pin"/>
+				  		<span id="meetmap-title">MeetMap</span>
+				    </div>
+				  </div>
+				</nav>
+			</div>
+		)
+	}
+});
+
+/* 
+	MeetupDetail
+	<MeetupDetail/>
+*/
+
+var MeetupDetail = React.createClass({
+	render: function() {
+		return (
+			<div className="panel panel-primary">
+				<div className="panel-heading">
+					<h4>{this.props.meetupInfo.group.name}</h4>
+				</div>
+				<div className="panel-body">
+					<p>{this.props.meetupInfo.name}</p>
+				</div>
+			</div>
 		)
 	}
 });
@@ -175,19 +231,22 @@ var MeetupInputForm = React.createClass({
 
 	render: function() {
 		return (
-			<form className="meetup-input-form" ref="meetupInput" onSubmit={this.getAddress}>
-				<label htmlFor="address">Address </label>
-				<input type="text" id="address" ref="address" required/><br/>
-				<label htmlFor="radius">Radius (miles) </label>
-				<select ref="radius">
-					<option value={2.5}>2.5</option>
-					<option value={5}>5</option>
-					<option value={10}>10</option>
-					<option value={25}>25</option>
-					<option value={50}>50</option>
-				</select>
-				<input type="Submit"/>
-			</form>
+				<form className="meetup-input-form form-inline" ref="meetupInput" onSubmit={this.getAddress}>
+					<div className="form-group">
+						<label htmlFor="address">Address</label>
+						<input className="form-control" type="text" id="address" ref="address" placeholder="1401 John F Kennedy Blvd, Philadelphia, PA"required/>
+			
+						<label htmlFor="radius">Radius (miles) </label>
+						<select className="form-control" ref="radius">
+							<option value={2.5}>2.5</option>
+							<option value={5}>5</option>
+							<option value={10}>10</option>
+							<option value={25}>25</option>
+							<option value={50}>50</option>
+						</select>
+						<input type="Submit" className="btn btn-primary"/>
+					</div>
+				</form>
 		)
 	}
 });
