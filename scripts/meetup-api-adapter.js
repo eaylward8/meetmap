@@ -1,17 +1,17 @@
 var meetupApiAdapter = {
 	urls: {
-		baseEventsUrl: 'https://api.meetup.com/2/open_events?and_text=False&offset=0&format=json&limited_events=False&photo-host=public&page=20&time=%2C1d&desc=False&status=upcoming&sig_id=190348600&sig=8edc07f145dfbe02e2b74b07f204eb058f667ac6',
-
-		categoryUrl: 'https://api.meetup.com/2/categories?offset=0&format=json&photo-host=public&page=100&order=shortname&desc=false&sig_id=190348600&sig=9f46690bb1d786258c1fadb0cf728c55f8c29b3c'
+		baseEventsUrl: 'https://api.meetup.com/2/open_events?and_text=False&offset=0&format=json&limited_events=False&photo-host=public&page=20&desc=False&status=upcoming&sig_id=190348600&sig=b5300643d74e1cf8aca59cedf9a136814fa50dd6',
 	},
 	
-	returnMeetupData: function(lat, lon) {
+	returnMeetupData: function(lat, lon, category) {
+		debugger;
 		var p = new Promise(function(resolve, reject) {
 			$.get({
 				url: meetupApiAdapter.urls.baseEventsUrl,
-				data: {lat: lat, lon: lon, radius: 5.0},
+				data: {lat: lat, lon: lon, category: category, radius: 5.0},
 				dataType: 'jsonp'
 			}).success(function(data) {
+				debugger;
 				var validMeetups = data.results.filter(function(meetup) {
 					if (meetup.venue) { return meetup }
 				});

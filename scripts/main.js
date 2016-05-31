@@ -30,38 +30,94 @@ var App = React.createClass({
 	},
 
 	geocodeAddress: function(address) {
-		var gc = new google.maps.Geocoder();
-		gc.geocode({'address': address}, this.handleGeocodeResults);
+		// var locPromise = new Promise(function(resolve, reject){});	
+		// var gc = new google.maps.Geocoder();
+		// gc.geocode({'address': address}, this.handleGeocodeResults);
+		// debugger;
+		// return new Promise(function(resolve, reject) {
+		// 	debugger;
+		// 	resolve(1);
+		// });
+		// gc.geocode({'address': address}, function(results, status) {
+		// 	if (status === google.maps.GeocoderStatus.OK) {
+		// 		var myMap = this.state.gmaps['gmap'];
+		// 		var myLoc = results[0].geometry.location;
+		// 		this.addLocation(myLoc);
+		// 		this.setMapToUserLocation(myMap, myLoc);
+		// 		debugger;
+		// 		// var promise = meetupApiAdapter.returnMeetupData(myLoc.lat(), myLoc.lng());
+
+		// 		// var callback = {
+		// 		// 	fulfillment: this.placeMeetupMarkers,
+		// 		// 	rejection: function(reason) { alert(reason) }
+		// 		// }
+
+		// 		// promise.then(callback.fulfillment, callback.rejection);
+
+		// 	} else {
+		// 		alert("Please enter a valid address. (Error: " + status + ")");
+		// 		// reject("Please enter a valid address. (Error: " + status + ")");
+		// 	}
+		// }.bind(this));
+
+		// var p = new Promise(function(resolve, reject) {
+			// debugger;
+			var gc = new google.maps.Geocoder();
+			return gc.geocode({'address': address}, function(results, status) {
+				debugger;
+				if (status === google.maps.GeocoderStatus.OK) {
+					var myMap = this.state.gmaps['gmap'];
+					var myLoc = results[0].geometry.location;
+					this.addLocation(myLoc);
+					this.setMapToUserLocation(myMap, myLoc);
+					// resolve(myLoc);
+				} else {
+					alert("Please enter a valid address. (Error: " + status + ")");
+					// reject("Please enter a valid address. (Error: " + status + ")");
+				}
+			}.bind(this));
+		// }.bind(this));
+		// p.then(function(val) {
+		// 	debugger;
+		// });
+		// return p;
 	},
 
 	handleGeocodeResults: function(results, status) {
-		if (status === google.maps.GeocoderStatus.OK) {
-			var myMap = this.state.gmaps['gmap'];
-			var myLoc = results[0].geometry.location;
-			this.addLocation(myLoc);
-			this.setMapToUserLocation(myMap, myLoc);
+		debugger;
+		// return new Promise(function(resolve, reject) {
+			if (status === google.maps.GeocoderStatus.OK) {
+				var myMap = this.state.gmaps['gmap'];
+				var myLoc = results[0].geometry.location;
+				this.addLocation(myLoc);
+				this.setMapToUserLocation(myMap, myLoc);
+				debugger;
+				// var promise = meetupApiAdapter.returnMeetupData(myLoc.lat(), myLoc.lng());
 
-			// var promise = meetupApiAdapter.returnMeetupData(myLoc.lat(), myLoc.lng());
+				// var callback = {
+				// 	fulfillment: this.placeMeetupMarkers,
+				// 	rejection: function(reason) { alert(reason) }
+				// }
 
-			// var callback = {
-			// 	fulfillment: this.placeMeetupMarkers,
-			// 	rejection: function(reason) { alert(reason) }
-			// }
+				// promise.then(callback.fulfillment, callback.rejection);
 
-			// promise.then(callback.fulfillment, callback.rejection);
-
-		} else {
-			alert("Please enter a valid address. (Error: " + status + ")");
-		}
+			} else {
+				alert("Please enter a valid address. (Error: " + status + ")");
+				// reject("Please enter a valid address. (Error: " + status + ")");
+			}
+		// });
+		// return locPromise;
+		return new Promise(function(resolve, reject) {
+			resolve(1);
+		});
 	},
 
 	findMeetups: function(category) {
-		debugger;
 		var id = locationCount;
+		var cat = parseInt(category);
 		var lat = this.state.locations['loc-' + id].lat();
 		var lng = this.state.locations['loc-' + id].lng();
-		debugger;
-		var promise = meetupApiAdapter.returnMeetupData();
+		var promise = meetupApiAdapter.returnMeetupData(lat, lng, cat);
 
 		var callback = {
 			fulfillment: this.placeMeetupMarkers,
@@ -126,7 +182,7 @@ var App = React.createClass({
 			<div className="top-div">
 				<Header/>
 				<div>
-					<MeetupInputForm geocodeAddress={this.geocodeAddress} findMeetups={this.findMeetups}/>
+					<MeetupInputForm geocodeAddress={this.geocodeAddress} state={this.state} addLocation={this.addLocation} setMapToUserLocation={this.setMapToUserLocation} findMeetups={this.findMeetups}/>
 				</div>
 				<GoogleMap gmaps={this.state.gmaps}/>
 			</div>
@@ -159,12 +215,49 @@ var MeetupInputForm = React.createClass({
 
 	getAddress: function(event) {
 		event.preventDefault();
-		var address = this.refs.address.value;
-		var category = this.refs.category.value;
 		// take address and add to App State
-		this.props.geocodeAddress(address);
-		this.props.findMeetups(category);
-		this.refs.meetupInput.reset();
+		// debugger;
+		// var testPromise = function() {
+		// 	// var that = this;
+		// 	// var x = 50;
+		// 	// var lPromise = new Promise(function(resolve, reject) {
+		// 	// 	debugger;
+		// 	// }.bind(this));
+		// 	debugger;
+		// 	var callback = {
+		// 			fulfillment: this.props.findMeetups,
+		// 			rejection: function(reason) { alert(reason) }
+		// 		}
+		// 	debugger;
+		// 	lPromise.then(callback.fulfillment, callback.rejection);
+		// }();
+		
+		// Promise.resolve(this.props.geocodeAddress).then(function() {
+		// 	console.log('yo');
+		// }.bind(this));
+		// var p = this.props.geocodeAddress(address);
+		var prom = new Promise(function(resolve, reject) {
+			resolve(new google.maps.Geocoder());
+		}.bind(this));
+
+		prom.then(function(value) {
+			var address = this.refs.address.value;
+			var gc = value;
+			gc.geocode({'address': address}, function(results, status) {
+				if (status === google.maps.GeocoderStatus.OK) {
+					var myMap = this.props.state.gmaps['gmap'];
+					var myLoc = results[0].geometry.location;
+					var category = this.refs.category.value;
+					this.props.addLocation(myLoc);
+					this.props.setMapToUserLocation(myMap, myLoc);
+					this.props.findMeetups(category);
+				} else {
+					alert("Please enter a valid address. (Error: " + status + ")");
+					// reject("Please enter a valid address. (Error: " + status + ")");
+				}
+			}.bind(this));
+		}.bind(this));
+		// this.refs.meetupInput.reset();
 	},
 
 	renderOption: function(category) {
