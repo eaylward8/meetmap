@@ -272,7 +272,7 @@ var MeetupInputForm = React.createClass({
 			<form className="meetup-input-form" ref="meetupInput" onSubmit={this.getAddress}>
 				<label htmlFor="address">Address </label>
 				<input type="text" id="address" ref="address" required/><br/>
-				<label htmlFor="category">Meetup Category </label>
+				<label htmlFor="radius">Radius </label>
 				<select ref="category">
 					<option value={0}>All</option>
 					{categories.map(this.renderOption)}

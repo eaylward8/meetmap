@@ -1,6 +1,6 @@
 var meetupApiAdapter = {
 	urls: {
-		baseEventsUrl: 'https://api.meetup.com/2/open_events?and_text=False&offset=0&format=json&limited_events=False&photo-host=public&page=20&desc=False&status=upcoming&sig_id=190348600&sig=b5300643d74e1cf8aca59cedf9a136814fa50dd6',
+		baseEventsUrl: 'https://api.meetup.com/2/open_events?and_text=False&offset=0&format=json&limited_events=False&photo-host=public&page=20&desc=False&status=upcoming&sig_id=190348600&sig=b5300643d74e1cf8aca59cedf9a136814fa50dd6'
 	},
 	
 	returnMeetupData: function(lat, lon, category) {
