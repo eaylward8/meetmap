@@ -1,14 +1,14 @@
 var meetupApiAdapter = {
 	urls: {
-		baseEventsUrl: 'https://api.meetup.com/2/open_events?and_text=False&offset=0&format=json&limited_events=False&photo-host=public&page=20&desc=False&status=upcoming&sig_id=190348600&sig=b5300643d74e1cf8aca59cedf9a136814fa50dd6'
+		baseEventsUrl: 'https://api.meetup.com/2/open_events?and_text=False&offset=0&format=json&limited_events=False&photo-host=public&page=20&time=%2C1w&desc=False&status=upcoming&sig_id=190348600&sig=e1d28ac4c7fbb792f746289869e52e8f08c103b5'
 	},
 	
-	returnMeetupData: function(lat, lon, category) {
+	returnMeetupData: function(lat, lon, rad) {
 		debugger;
 		var p = new Promise(function(resolve, reject) {
 			$.get({
 				url: meetupApiAdapter.urls.baseEventsUrl,
-				data: {lat: lat, lon: lon, category: category, radius: 5.0},
+				data: {lat: lat, lon: lon, radius: rad},
 				dataType: 'jsonp'
 			}).success(function(data) {
 				debugger;
