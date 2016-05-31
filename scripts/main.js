@@ -52,9 +52,14 @@ var App = React.createClass({
 			var group = meetup.group.name;
 			var content = '<h3>' + group + '</h3>' +
 				'<p>' + eventName + '</p>';
-
+			this.addMeetup(meetup);
 			this.initMarker(this.state.gmaps.gmap, myLatLon, null, content);
 		}, this);
+	},
+
+	addMeetup: function(meetup) {
+		this.state.meetups['loc-' + locationCount + '-meetups'].push(meetup);
+		this.setState({ meetups: this.state.meetups })
 	},
 
 	addLocation: function(location) {
@@ -62,7 +67,8 @@ var App = React.createClass({
 		this.state.locations['loc-' + id] = location;
 		// set up array for this location's markers
 		this.state.markers['loc-' + id + '-markers'] = [];
-		this.setState({ locations: this.state.locations, markers: this.state.markers });
+		this.state.meetups['loc-' + id + '-meetups'] = [];
+		this.setState({ locations: this.state.locations, markers: this.state.markers, meetups: this.state.meetups });
 	},
 
 	setMapToUserLocation: function(map, location) {
