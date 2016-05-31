@@ -69,7 +69,7 @@ var App = React.createClass({
 			var myLatLon = new google.maps.LatLng(lat, lon);
 			var eventName = meetup.name;
 			var group = meetup.group.name;
-			var content = '<h3>' + group + '</h3>' +
+			var content = '<h4>' + group + '</h4>' +
 				'<p>' + eventName + '</p>';
 			this.addMeetup(meetup);
 			this.initMarker(this.state.gmaps.gmap, myLatLon, null, content);
@@ -91,10 +91,11 @@ var App = React.createClass({
 		this.setState({ locations: this.state.locations, markers: this.state.markers, meetups: this.state.meetups });
 	},
 
-	setMapToUserLocation: function(map, location) {
+	setMapToUserLocation: function(map, location, radius) {
 		var userMarker = '../build/css/images/green-pin.svg';
+		var radii = {'2.5': 14, '5': 13, '10': 11, '25': 9, '50': 8}
 		map.setCenter(location);
-		map.setZoom(11);
+		map.setZoom(radii[radius]);
 		
 		if (locationCount > 1) {
 			this.hidePriorMarkers();	
@@ -219,7 +220,7 @@ var MeetupInputForm = React.createClass({
 					var myLoc = results[0].geometry.location;
 					var radius = this.refs.radius.value;
 					this.props.addLocation(myLoc);
-					this.props.setMapToUserLocation(myMap, myLoc);
+					this.props.setMapToUserLocation(myMap, myLoc, radius);
 					this.props.findMeetups(radius);
 				} else {
 					alert("Please enter a valid address. (Error: " + status + ")");
@@ -260,8 +261,8 @@ var GoogleMap = React.createClass({
 	loadMapAfterDOM: function(gmaps) {
 		document.addEventListener("DOMContentLoaded", function() {
 			gmaps['gmap'] = new google.maps.Map(document.getElementById('map'), {
-				center: {lat: 39.9526, lng: -75.1652},
-				zoom: 11
+				center: {lat: 39.9526, lng: -75.5},
+				zoom: 8
 			});
 			gmaps['infowindow'] = new google.maps.InfoWindow();
 		});
