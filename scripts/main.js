@@ -99,7 +99,7 @@ var App = React.createClass({
 			<div className="top-div">
 				<Header/>
 				<div>
-					<MeetupInputForm geocodeAddress={this.geocodeAddress} state={this.state} addLocation={this.addLocation} setMapToUserLocation={this.setMapToUserLocation} findMeetups={this.findMeetups}/>
+					<MeetupInputForm state={this.state} addLocation={this.addLocation} setMapToUserLocation={this.setMapToUserLocation} findMeetups={this.findMeetups}/>
 				</div>
 				<GoogleMap gmaps={this.state.gmaps}/>
 			</div>
