@@ -28,19 +28,6 @@ var App = React.createClass({
 		}
 	},
 
-	componentDidMount: function() {
-    // var localStorageRef = localStorage.getItem('meetups');
-    // if (localStorageRef) {
-    //   this.setState({
-    //     meetups: JSON.parse(localStorageRef)
-    //   })
-    // }
-  },
-
-  componentWillUpdate: function(nextProps, nextState) {
-    // localStorage.setItem('meetups', JSON.stringify(nextState.meetups));
-  },
-
   clearMeetups: function() {
   	this.state.meetups = {};
   },
@@ -201,6 +188,7 @@ var MeetupDetail = React.createClass({
 		var time = this.formatDate(this.props.meetupInfo.time);
 		var eventName = this.props.meetupInfo.name;
 		var numPeople = this.props.meetupInfo.yes_rsvp_count;
+		var url = this.props.meetupInfo.event_url;
 		return (
 			<div className="panel panel-primary">
 				<div className="panel-heading">
@@ -208,7 +196,7 @@ var MeetupDetail = React.createClass({
 				</div>
 				<div className="panel-body">
 					<p><strong>{time}</strong></p>
-					<p>{eventName}</p>
+					<p><a href={url} target="_blank">{eventName}</a></p>
 					<p>{numPeople} people going</p>
 				</div>
 			</div>
@@ -222,9 +210,6 @@ var MeetupDetail = React.createClass({
 */
 
 var MeetupInputForm = React.createClass({
-	// History is part of ReactRouter, see line ~ 8
-	// mixins : [History],
-
 	getAddress: function(event) {
 		event.preventDefault();
 
