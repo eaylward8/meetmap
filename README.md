@@ -23,6 +23,6 @@ Meetup is a single-page React.js web app that lets you discover Meetups happenin
 * View the Meetup's page on meetup.com by clicking on the event name.
 
 ####What's next?
-* Meetup API - Switch from API key signatures to OAuth for more interesting queries (category, date, etc.).
-* Google Maps - Show distance between user location and currently selected Meetup marker
+* Meetup API - Switch from API key signatures to OAuth for more interesting API queries (Meetup category, date, etc.).
+* Google Maps - Show distance/route between user location and currently selected Meetup marker
 * Database - Implement ability for users to save meetups (currently MeetMap is front-end only).
