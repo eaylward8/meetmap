@@ -13,6 +13,7 @@ Meetup is a single-page React.js web app that lets you discover Meetups happenin
 * jQuery for making AJAX requests to Meetup's API
 * Bootstrap for layout & stylin'
 * Gulp for automated builds
+* Firebase for hosting
 
 ####Features
 * Find Meetups based on your location and preferred search radius.
