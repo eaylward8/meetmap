@@ -9,6 +9,28 @@ body {
 	float: left;
 }
 
+#info-button {
+	background-color: transparent;
+	border: none;
+	padding: 12px 10px 0 0;
+	float: right;
+}
+
+#info-button:focus {
+	outline: none;
+}
+
+.glyphicon-info-sign {
+	color: #fff;
+	font-size: 1.6em;
+	vertical-align: center;
+	transition: color 0.3s linear;
+}
+
+.glyphicon-info-sign:hover {
+	color: #2ecc71;
+}
+
 #map {
 	max-width: 100%;
 	height: 500px;
