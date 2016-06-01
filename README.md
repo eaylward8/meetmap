@@ -19,6 +19,7 @@ Meetup is a single-page React.js web app that lets you discover Meetups happenin
 * MeetMap shows Meetups happening over the next 3 days (up to 30 will be returned).
 * Click on a map marker to see details for that Meetup.
 * Click on a green Meetup Panel (right side of page) to show its corresponding map marker.
+* View the Meetup's page on meetup.com by clicking on the event name.
 
 ####What's next?
 * Meetup API - Switch from API key signatures to OAuth for more interesting queries (category, date, etc.).
