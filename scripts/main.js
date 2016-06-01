@@ -66,9 +66,8 @@ var App = React.createClass({
 	},
 
 	addMeetup: function(meetup) {
-		var locId = locationCount;
 		var meetupId = meetupCount += 1;
-		this.state.meetups['loc-' + locationCount + '-meetup-' + meetupId] = meetup;
+		this.state.meetups['meetup-' + meetupId] = meetup;
 		this.setState({ meetups: this.state.meetups })
 	},
 
@@ -76,8 +75,7 @@ var App = React.createClass({
 		var id = locationCount += 1;
 		this.state.locations['loc-' + id] = location;
 		// set up array for this location's markers
-		this.state.markers['loc-' + id + '-markers'] = [];
-		this.setState({ locations: this.state.locations, markers: this.state.markers, meetups: this.state.meetups });
+		this.setState({ locations: this.state.locations });
 	},
 
 	setMapToUserLocation: function(map, location, radius) {
@@ -109,19 +107,19 @@ var App = React.createClass({
 	},
 
 	addMarker: function(marker) {
-		this.state.markers['loc-' + locationCount + '-markers'].push(marker);
+		var meetupId = meetupCount;
+		this.state.markers['meetup-' + meetupId + '-marker'] = marker;
 		this.setState({ markers: this.state.markers });
 	},
 
 	hidePriorMarkers: function() {
-		var prevId = locationCount - 1;
-		this.state.markers['loc-' + prevId + '-markers'].forEach(function(marker) {
-			marker.setMap(null);
-		});
+		for (var key in this.state.markers) {
+			this.state.markers[key].setMap(null);
+		};
 	},
 
 	renderMeetupDetail: function(key) {
-		return <MeetupDetail key={key} index={key} meetupInfo={this.state.meetups[key]}/>
+		return <MeetupDetail key={key} index={key} meetupInfo={this.state.meetups[key]} markers={this.state.markers} infowindow={this.state.gmaps.infowindow}/>
 	},
 
 	render: function() {
@@ -170,6 +168,11 @@ var Header = React.createClass({
 */
 
 var MeetupDetail = React.createClass({
+	openInfowindow: function() {
+		var key = this.props.index;
+		debugger;
+	},
+
 	formatDate: function(milliseconds) {
 		var dateObj = new Date(milliseconds);
 		var dateStr = dateObj.toDateString();
@@ -194,7 +197,7 @@ var MeetupDetail = React.createClass({
 		var url = this.props.meetupInfo.event_url;
 		return (
 			<div className="panel panel-primary">
-				<div className="panel-heading">
+				<div className="panel-heading" onClick={this.openInfowindow}>
 					<h4>{group}</h4>
 				</div>
 				<div className="panel-body">
@@ -214,7 +217,7 @@ var MeetupDetail = React.createClass({
 */
 
 var MeetupInputForm = React.createClass({
-	getAddress: function(event) {
+	displayPinsAndMeetups: function(event) {
 		event.preventDefault();
 
 		var prom = new Promise(function(resolve, reject) {
@@ -242,7 +245,7 @@ var MeetupInputForm = React.createClass({
 
 	render: function() {
 		return (
-				<form className="meetup-input-form form-inline" ref="meetupInput" onSubmit={this.getAddress}>
+				<form className="meetup-input-form form-inline" ref="meetupInput" onSubmit={this.displayPinsAndMeetups}>
 					<div className="form-group">
 						<label htmlFor="address">Address</label>
 						<input className="form-control" type="text" id="address" ref="address" placeholder="1401 John F Kennedy Blvd, Philadelphia, PA"required/>
