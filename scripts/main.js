@@ -56,8 +56,10 @@ var App = React.createClass({
 			var myLatLon = new google.maps.LatLng(lat, lon);
 			var eventName = meetup.name;
 			var group = meetup.group.name;
+			var address = meetup.venue.address_1 + ", " + meetup.venue.city;
 			var content = '<h4>' + group + '</h4>' +
-				'<p>' + eventName + '</p>';
+				'<p>' + eventName + '</p>' +
+				'<p>' + address + '</p>';
 			this.addMeetup(meetup);
 			this.initMarker(this.state.gmaps.gmap, myLatLon, null, content);
 		}, this);
@@ -186,6 +188,7 @@ var MeetupDetail = React.createClass({
 	render: function() {
 		var group = this.props.meetupInfo.group.name;
 		var time = this.formatDate(this.props.meetupInfo.time);
+		var address = this.props.meetupInfo.venue.address_1 + ", " + this.props.meetupInfo.venue.city;
 		var eventName = this.props.meetupInfo.name;
 		var numPeople = this.props.meetupInfo.yes_rsvp_count;
 		var url = this.props.meetupInfo.event_url;
@@ -195,8 +198,9 @@ var MeetupDetail = React.createClass({
 					<h4>{group}</h4>
 				</div>
 				<div className="panel-body">
+					<p><a href={url} target="_blank"><strong>{eventName}</strong></a></p>
 					<p><strong>{time}</strong></p>
-					<p><a href={url} target="_blank">{eventName}</a></p>
+					<p>{address}</p>
 					<p>{numPeople} people going</p>
 				</div>
 			</div>
