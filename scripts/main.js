@@ -93,7 +93,7 @@ var App = React.createClass({
 
 	setMapToUserLocation: function(map, location, radius) {
 		var userMarker = '../build/css/images/green-pin.svg';
-		var radii = {'2.5': 14, '5': 13, '10': 11, '25': 9, '50': 8}
+		var radii = {'2.5': 13, '5': 12, '10': 11, '25': 9, '50': 8}
 		map.setCenter(location);
 		map.setZoom(radii[radius]);
 		
@@ -181,14 +181,35 @@ var Header = React.createClass({
 */
 
 var MeetupDetail = React.createClass({
+	formatDate: function(milliseconds) {
+		var dateObj = new Date(milliseconds);
+		var dateStr = dateObj.toDateString();
+		var amPm = "am"
+		var hour = function() {
+			if (dateObj.getHours() >= 12) { amPm = "pm" }
+			if (dateObj.getHours() > 12) { 
+				return dateObj.getHours() - 12 
+			}
+			return dateObj.getHours();
+		}();
+		var min = dateObj.getMinutes() < 10 ? "0" + dateObj.getMinutes() : dateObj.getMinutes();
+		return dateStr += ", " + hour + ":" + min + " " + amPm;
+	},
+
 	render: function() {
+		var group = this.props.meetupInfo.group.name;
+		var time = this.formatDate(this.props.meetupInfo.time);
+		var eventName = this.props.meetupInfo.name;
+		var numPeople = this.props.meetupInfo.yes_rsvp_count;
 		return (
 			<div className="panel panel-primary">
 				<div className="panel-heading">
-					<h4>{this.props.meetupInfo.group.name}</h4>
+					<h4>{group}</h4>
 				</div>
 				<div className="panel-body">
-					<p>{this.props.meetupInfo.name}</p>
+					<p><strong>{time}</strong></p>
+					<p>{eventName}</p>
+					<p>{numPeople} people going</p>
 				</div>
 			</div>
 		)

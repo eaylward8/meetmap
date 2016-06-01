@@ -10,7 +10,6 @@ var meetupApiAdapter = {
 				data: {lat: lat, lon: lon, radius: rad},
 				dataType: 'jsonp'
 			}).success(function(data) {
-				debugger;
 				var validMeetups = data.results.filter(function(meetup) {
 					if (meetup.venue) { return meetup }
 				});
