@@ -60,14 +60,15 @@ var App = React.createClass({
 			var content = '<h4>' + group + '</h4>' +
 				'<p>' + eventName + '</p>' +
 				'<p>' + address + '</p>';
-			this.addMeetup(meetup);
+			this.addMeetup(meetup, content);
 			this.initMarker(this.state.gmaps.gmap, myLatLon, null, content);
 		}, this);
 	},
 
-	addMeetup: function(meetup) {
+	addMeetup: function(meetup, content) {
 		var meetupId = meetupCount += 1;
 		this.state.meetups['meetup-' + meetupId] = meetup;
+		this.state.meetups['meetup-' + meetupId]['content'] = content;
 		this.setState({ meetups: this.state.meetups })
 	},
 
@@ -119,7 +120,7 @@ var App = React.createClass({
 	},
 
 	renderMeetupDetail: function(key) {
-		return <MeetupDetail key={key} index={key} meetupInfo={this.state.meetups[key]} markers={this.state.markers} infowindow={this.state.gmaps.infowindow}/>
+		return <MeetupDetail key={key} index={key} meetupInfo={this.state.meetups[key]} markers={this.state.markers} gmaps={this.state.gmaps}/>
 	},
 
 	render: function() {
@@ -170,7 +171,12 @@ var Header = React.createClass({
 var MeetupDetail = React.createClass({
 	openInfowindow: function() {
 		var key = this.props.index;
-		debugger;
+		var infowindow = this.props.gmaps.infowindow;
+		var map = this.props.gmaps.gmap;
+		var marker = this.props.markers[key + '-marker'];
+		var content = this.props.meetupInfo.content;
+		infowindow.setContent(content);
+		infowindow.open(map, marker);
 	},
 
 	formatDate: function(milliseconds) {
