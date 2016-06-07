@@ -47,7 +47,7 @@ var MeetupInputForm = React.createClass({
 							<option value={25}>25</option>
 							<option value={50}>50</option>
 						</select>
-						<input type="Submit" className="btn btn-primary"/>
+						<input type="Submit" className="btn btn-primary" value="Find Meetups!"/>
 					</div>
 				</form>
 		)

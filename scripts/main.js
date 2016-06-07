@@ -6,8 +6,8 @@ var Route = ReactRouter.Route;
 var Navigation = ReactRouter.Navigation;
 var History = ReactRouter.History;
 /* 
-	createBrowserHistory allows for better URLs
-	called in routes variable, inside <Router>
+	- createBrowserHistory allows for better URLs
+	- called in routes variable, inside <Router>
 */
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 

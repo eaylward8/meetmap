@@ -53,8 +53,9 @@ var App = React.createClass({
 			var eventName = meetup.name;
 			var group = meetup.group.name;
 			var address = meetup.venue.address_1 + ", " + meetup.venue.city;
+			var url = meetup.event_url;
 			var content = '<h4>' + group + '</h4>' +
-				'<p>' + eventName + '</p>' +
+				'<p><a target="_blank" href=' + url + '>' + eventName + '</a></p>' +
 				'<p>' + address + '</p>';
 			this.addMeetup(meetup, content);
 			this.initMarker(this.state.gmaps.gmap, myLatLon, null, content);
