@@ -6,7 +6,6 @@ import GoogleMap from './GoogleMap';
 import MeetupDetail from './MeetupDetail';
 
 var meetupApiAdapter = require('../meetup-api-adapter');
-var userMarker = '../../css/images/green-pin.svg';
 var locationCount = 0;
 var meetupCount = 0;
 
@@ -77,8 +76,15 @@ var App = React.createClass({
 	},
 
 	setMapToUserLocation: function(map, location, radius) {
-		debugger;
-		var radii = {'2.5': 13, '5': 12, '10': 11, '25': 9, '50': 8}
+		// var icon = {
+		// 	url: '../../css/images/green-pin.svg',
+		// 	scaledSize: new google.maps.Size(70,70)
+		// };
+		// 16-Jun-16: Custom marker not displaying correctly - getting obscured by other markers
+		// changed from custom marker to regular marker w/ star label
+
+		var radii = {'2.5': 13, '5': 12, '10': 11, '25': 9, '50': 8};
+		var label = '\u2605';
 		map.setCenter(location);
 		map.setZoom(radii[radius]);
 		
@@ -86,14 +92,16 @@ var App = React.createClass({
 			this.hidePriorMarkers();	
 		}
 		var content = '<p>You are here!</p>';
-		this.initMarker(map, location, userMarker, content);
+		this.initMarker(map, location, label, content);
 	},
 
-	initMarker: function(map, location, icon, content) {	
+	initMarker: function(map, location, label, content) {	
+		// icon commented out below because custom icon is breaking; see above comments
 		var marker = new google.maps.Marker({
 			map: map,
 			position: location,
-			icon: icon
+			// icon: icon
+			label: label
 		});
 
 		google.maps.event.addListener(marker, 'click', function() {
