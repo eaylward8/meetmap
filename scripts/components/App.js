@@ -24,7 +24,10 @@ var App = React.createClass({
 	},
 
   clearMeetups: function() {
-  	this.state.meetups = {};
+  	// this.state.meetups = {};
+  	this.setState({
+  		meetups: {}
+  	});
   },
 
 	findMeetups: function(radius) {
@@ -123,7 +126,7 @@ var App = React.createClass({
 			this.state.markers[key].setMap(null);
 		};
 	},
-
+	// remove markers & gmaps, add click event handler
 	renderMeetupDetail: function(key) {
 		return <MeetupDetail key={key} index={key} meetupInfo={this.state.meetups[key]} markers={this.state.markers} gmaps={this.state.gmaps}/>
 	},
@@ -136,7 +139,7 @@ var App = React.createClass({
 				<div className="row" id="main-container">
 					<div className="col-md-7">
 						<MeetupInputForm state={this.state} addLocation={this.addLocation} setMapToUserLocation={this.setMapToUserLocation} findMeetups={this.findMeetups}/>
-						<GoogleMap gmaps={this.state.gmaps}/>
+						<GoogleMap meetups={this.state.meetups} gmaps={this.state.gmaps}/>
 					</div>
 					<div className="col-md-5" id="meetup-list-div">
 							{Object.keys(this.state.meetups).map(this.renderMeetupDetail)}
